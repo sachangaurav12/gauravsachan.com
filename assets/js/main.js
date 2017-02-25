@@ -1,9 +1,3 @@
-/*
-	Lens by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
-
 var main = (function($) { var _ = {
 
 	/**
@@ -408,70 +402,60 @@ var main = (function($) { var _ = {
 
 				});
 
-		// Create slides from thumbnails.
-			_.$thumbnails.children()
-				.each(function() {
+		// Create slides.
+      for(var i = 1; i<=5; i++){
 
-					var	$this = $(this),
-						$thumbnail = $this.children('.thumbnail'),
-						s;
+          var $this = $(this),
+            s;
 
-					// Slide object.
-						s = {
-							$parent: $this,
-							$slide: null,
-							$slideImage: null,
-							$slideCaption: null,
-							url: $thumbnail.attr('href'),
-							loaded: false
-						};
+          // Slide object.
+            s = {
+              $parent: $this,
+              $slide: null,
+              $slideImage: null,
+              $slideCaption: null,
+              url: `assets/images/0${i}.jpg`,
+              loaded: false
+            };
 
-					// Parent.
-						$this.attr('tabIndex', '-1');
+          // Parent.
+            $this.attr('tabIndex', '-1');
 
-					// Slide.
+          // Slide.
 
-						// Create elements.
-	 						s.$slide = $('<div class="slide"><div class="caption"></div><div class="image"></div></div>');
+            // Create elements.
+              s.$slide = $('<div class="slide"><div class="caption"></div><div class="image"></div></div>');
 
-	 					// Image.
- 							s.$slideImage = s.$slide.children('.image');
+            // Image.
+              s.$slideImage = s.$slide.children('.image');
 
- 							// Set background stuff.
-	 							s.$slideImage
-		 							.css('background-image', '')
-		 							.css('background-position', ($thumbnail.data('position') || 'center'));
+              // Set background stuff.
+                s.$slideImage
+                  .css('background-image', '')
+                  .css('background-position', 'center');
 
-						// Caption.
-							s.$slideCaption = s.$slide.find('.caption');
+            // Caption.
+              s.$slideCaption = s.$slide.find('.caption');
 
-							// Move everything *except* the thumbnail itself to the caption.
-								$this.children().not($thumbnail)
-									.appendTo(s.$slideCaption);
+          // Preload?
+            if (_.settings.preload) {
 
-					// Preload?
-						if (_.settings.preload) {
+              // Force image to download.
+                var $img = $('<img src="' + s.url + '" />');
 
-							// Force image to download.
-								var $img = $('<img src="' + s.url + '" />');
+              // Set slide's background image to it.
+                s.$slideImage
+                  .css('background-image', 'url(' + s.url + ')');
 
-							// Set slide's background image to it.
-								s.$slideImage
-									.css('background-image', 'url(' + s.url + ')');
+              // Mark slide as loaded.
+                s.$slide.addClass('loaded');
+                s.loaded = true;
 
-							// Mark slide as loaded.
-								s.$slide.addClass('loaded');
-								s.loaded = true;
+            }
 
-						}
-
-					// Add to slides array.
-						_.slides.push(s);
-
-					// Set thumbnail's index.
-						$thumbnail.data('index', _.slides.length - 1);
-
-				});
+          // Add to slides array.
+            _.slides.push(s);
+        };
 
 	},
 
